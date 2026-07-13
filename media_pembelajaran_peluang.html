@@ -1,0 +1,1882 @@
+
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="UTF-8">
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=Space+Grotesk:wght@300;400;500;600;700&display=swap');
+
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+
+  :root {
+    --navy: #0B1F4F;
+    --navy-mid: #1A3575;
+    --navy-light: #2A4FA0;
+    --gold: #C9A227;
+    --gold-light: #F0C842;
+    --gold-pale: #FFF3CC;
+    --cream: #FFFDF4;
+    --white: #FFFFFF;
+    --text-dark: #0B1F4F;
+    --text-mid: #3A4B6E;
+    --text-muted: #6B7A99;
+    --success: #1D9E75;
+    --danger: #E24B4A;
+    --warn: #EF9F27;
+    --border: rgba(11,31,79,0.12);
+    --font-display: 'Plus Jakarta Sans', sans-serif;
+    --font-body: 'Space Grotesk', sans-serif;
+    --r-sm: 8px;
+    --r-md: 12px;
+    --r-lg: 18px;
+    --r-xl: 24px;
+    --r-full: 9999px;
+    --slide-w: 680px;
+  }
+
+  body {
+    font-family: var(--font-body);
+    background: var(--cream);
+    color: var(--text-dark);
+    width: 100%;
+    overflow-x: hidden;
+  }
+
+  .app-container {
+    max-width: var(--slide-w);
+    margin: 0 auto;
+    padding: 0 0 2rem;
+    position: relative;
+  }
+
+  /* ===== SLIDE SYSTEM ===== */
+  .slide { display: none; animation: fadeIn 0.4s ease; }
+  .slide.active { display: block; }
+  @keyframes fadeIn { from { opacity:0; transform:translateY(8px); } to { opacity:1; transform:translateY(0); } }
+
+  /* ===== NAV BAR ===== */
+  .nav-bar {
+    background: var(--navy);
+    padding: 10px 16px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    position: sticky;
+    top: 0;
+    z-index: 100;
+    border-radius: 0 0 var(--r-md) var(--r-md);
+  }
+  .nav-bar .logo {
+    font-family: var(--font-display);
+    font-size: 13px;
+    font-weight: 700;
+    color: var(--gold-light);
+    letter-spacing: 0.5px;
+  }
+  .nav-bar .progress-wrap {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+  .progress-bar {
+    width: 120px;
+    height: 4px;
+    background: rgba(255,255,255,0.2);
+    border-radius: var(--r-full);
+    overflow: hidden;
+  }
+  .progress-fill {
+    height: 100%;
+    background: var(--gold-light);
+    border-radius: var(--r-full);
+    transition: width 0.4s ease;
+  }
+  .slide-counter {
+    font-size: 11px;
+    color: rgba(255,255,255,0.6);
+    font-weight: 500;
+  }
+  .btn-home {
+    background: rgba(255,255,255,0.12);
+    border: none;
+    border-radius: var(--r-sm);
+    color: #fff;
+    font-size: 12px;
+    padding: 5px 10px;
+    cursor: pointer;
+    font-family: var(--font-body);
+    transition: background 0.2s;
+  }
+  .btn-home:hover { background: rgba(255,255,255,0.22); }
+
+  /* ===== SLIDE NAVIGATION BUTTONS ===== */
+  .slide-nav {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 1rem 1.25rem 0;
+    gap: 10px;
+  }
+  .btn-nav {
+    background: var(--navy);
+    color: #fff;
+    border: none;
+    border-radius: var(--r-full);
+    padding: 9px 20px;
+    font-family: var(--font-body);
+    font-size: 13px;
+    font-weight: 500;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    transition: background 0.2s, transform 0.1s;
+  }
+  .btn-nav:hover { background: var(--navy-light); }
+  .btn-nav:active { transform: scale(0.97); }
+  .btn-nav:disabled { opacity: 0.35; cursor: default; }
+  .btn-nav.gold { background: var(--gold); color: var(--navy); font-weight: 700; }
+  .btn-nav.gold:hover { background: var(--gold-light); }
+
+  /* ===== TYPOGRAPHY ===== */
+  h1, h2, h3, h4 { font-family: var(--font-display); }
+  .slide-title {
+    font-size: 20px;
+    font-weight: 800;
+    color: var(--navy);
+    line-height: 1.3;
+    margin-bottom: 4px;
+  }
+  .slide-subtitle {
+    font-size: 13px;
+    color: var(--text-muted);
+    font-weight: 400;
+    margin-bottom: 1.25rem;
+  }
+  .section-header {
+    padding: 1.25rem 1.25rem 0;
+  }
+
+  /* ===== BADGE ===== */
+  .badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 4px;
+    padding: 3px 10px;
+    border-radius: var(--r-full);
+    font-size: 11px;
+    font-weight: 600;
+    letter-spacing: 0.3px;
+  }
+  .badge.navy { background: var(--navy); color: var(--gold-light); }
+  .badge.gold { background: var(--gold-pale); color: var(--navy); border: 1px solid var(--gold); }
+  .badge.green { background: #EAF3DE; color: #3B6D11; }
+  .badge.teal { background: #E1F5EE; color: #0F6E56; }
+  .badge.blue { background: #E6F1FB; color: #185FA5; }
+  .badge.purple { background: #EEEDFE; color: #3C3489; }
+
+  /* ===== CARD ===== */
+  .card {
+    background: var(--white);
+    border: 0.5px solid var(--border);
+    border-radius: var(--r-lg);
+    padding: 1rem 1.25rem;
+  }
+  .card.navy-card {
+    background: var(--navy);
+    color: #fff;
+    border-color: var(--navy-light);
+  }
+  .card.gold-card {
+    background: var(--gold-pale);
+    border-color: var(--gold);
+  }
+
+  /* ===== COVER SLIDE ===== */
+  .cover {
+    background: linear-gradient(145deg, #fff5f0 0%, #ffe8da 40%, #ffd6c0 100%);
+    padding: 2rem 1.5rem 1.5rem;
+    position: relative;
+    overflow: hidden;
+    min-height: 460px;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    border-bottom: 2px solid #f4b89a;
+  }
+  .cover-bg-circles {
+    position: absolute;
+    top: -60px; right: -60px;
+    width: 260px; height: 260px;
+    border-radius: 50%;
+    border: 40px solid rgba(255,255,255,0.5);
+  }
+  .cover-bg-circles-2 {
+    position: absolute;
+    bottom: -40px; left: -30px;
+    width: 180px; height: 180px;
+    border-radius: 50%;
+    border: 25px solid rgba(255,255,255,0.35);
+  }
+  .cover-top { position: relative; z-index: 2; }
+  .cover-badge-row {
+    display: flex;
+    gap: 8px;
+    flex-wrap: wrap;
+    margin-bottom: 1rem;
+  }
+  .cover-badge-row .badge.navy { background: #e8601a; color: #fff; }
+  .cover-badge-row .badge.gold { background: #fff; color: #d95a14; border-color: #f4a87a; }
+  .cover-badge-row .badge.green { background: rgba(255,255,255,0.7); color: #2d7a30; }
+
+  /* Cover illustration container */
+  .cover-illustration {
+    position: absolute;
+    right: -10px; top: 50%;
+    transform: translateY(-52%);
+    width: 170px;
+    opacity: 0.92;
+    z-index: 1;
+    pointer-events: none;
+  }
+
+  .cover-title {
+    font-family: var(--font-display);
+    font-size: 52px;
+    font-weight: 800;
+    color: #c94d10;
+    line-height: 1.05;
+    margin-bottom: 4px;
+    letter-spacing: -1px;
+    text-shadow: 0 2px 0 rgba(255,255,255,0.6);
+  }
+  .cover-title-sub {
+    font-family: var(--font-display);
+    font-size: 14px;
+    font-weight: 600;
+    color: #8a3510;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    margin-bottom: 10px;
+    display: block;
+  }
+  .cover-tagline {
+    font-size: 13px;
+    color: #7a3a1a;
+    line-height: 1.6;
+    margin-bottom: 1.25rem;
+    max-width: 58%;
+  }
+  .cover-stem-row {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 8px;
+    margin-bottom: 1.25rem;
+  }
+  .stem-card {
+    background: rgba(255,255,255,0.55);
+    border: 0.5px solid rgba(201,100,50,0.2);
+    border-radius: var(--r-md);
+    padding: 10px 8px;
+    text-align: center;
+    backdrop-filter: blur(4px);
+  }
+  .stem-card .stem-icon { font-size: 22px; margin-bottom: 4px; display: block; }
+  .stem-card .stem-letter {
+    font-family: var(--font-display);
+    font-size: 14px;
+    font-weight: 800;
+    color: #c94d10;
+    display: block;
+  }
+  .stem-card .stem-word {
+    font-size: 10px;
+    color: #9a5030;
+    display: block;
+    letter-spacing: 0.3px;
+  }
+  .cover-meta {
+    display: flex;
+    gap: 12px;
+    flex-wrap: wrap;
+    align-items: center;
+    padding-top: 1rem;
+    border-top: 0.5px solid rgba(201,100,50,0.25);
+    position: relative; z-index: 2;
+  }
+  .cover-meta-item {
+    font-size: 11px;
+    color: #8a4020;
+    display: flex;
+    align-items: center;
+    gap: 4px;
+  }
+  .cover-meta-item strong { color: #5a2510; }
+  .cover-cta {
+    margin-top: 1.25rem;
+    background: linear-gradient(135deg, #e8601a 0%, #c94d10 100%);
+    color: #fff;
+    border: none;
+    border-radius: var(--r-full);
+    padding: 13px 28px;
+    font-family: var(--font-display);
+    font-size: 15px;
+    font-weight: 800;
+    cursor: pointer;
+    width: 100%;
+    transition: opacity 0.2s, transform 0.1s;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    position: relative; z-index: 2;
+    box-shadow: 0 4px 16px rgba(201,77,16,0.35);
+  }
+  .cover-cta:hover { opacity: 0.9; }
+  .cover-cta:active { transform: scale(0.98); }
+
+  /* ===== KATA PENGANTAR ===== */
+  .pengantar-quote {
+    background: var(--gold-pale);
+    border-left: 4px solid var(--gold);
+    border-radius: 0 var(--r-md) var(--r-md) 0;
+    padding: 1rem 1.25rem;
+    font-style: italic;
+    color: var(--navy);
+    font-size: 14px;
+    line-height: 1.7;
+    margin-bottom: 1rem;
+  }
+  .pengantar-body {
+    font-size: 14px;
+    color: var(--text-mid);
+    line-height: 1.8;
+    margin-bottom: 1rem;
+  }
+  .contoh-grid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 10px;
+    margin-bottom: 1rem;
+  }
+  .contoh-item {
+    background: var(--white);
+    border: 0.5px solid var(--border);
+    border-radius: var(--r-md);
+    padding: 12px;
+    display: flex;
+    align-items: flex-start;
+    gap: 10px;
+  }
+  .contoh-icon { font-size: 24px; flex-shrink: 0; }
+  .contoh-text h4 { font-size: 13px; color: var(--navy); font-weight: 600; margin-bottom: 2px; }
+  .contoh-text p { font-size: 11px; color: var(--text-muted); line-height: 1.5; }
+
+  /* ===== DAFTAR ISI ===== */
+  .daftar-isi-grid {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 10px;
+  }
+  .daftar-item {
+    background: var(--white);
+    border: 0.5px solid var(--border);
+    border-radius: var(--r-lg);
+    padding: 14px 16px;
+    display: flex;
+    align-items: center;
+    gap: 14px;
+    cursor: pointer;
+    transition: border-color 0.2s, transform 0.1s, box-shadow 0.2s;
+  }
+  .daftar-item:hover {
+    border-color: var(--navy-light);
+    transform: translateX(3px);
+  }
+  .daftar-num {
+    width: 34px; height: 34px;
+    border-radius: var(--r-sm);
+    background: var(--navy);
+    color: var(--gold-light);
+    font-family: var(--font-display);
+    font-size: 14px;
+    font-weight: 800;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+  }
+  .daftar-info h4 { font-size: 14px; color: var(--navy); font-weight: 600; margin-bottom: 2px; }
+  .daftar-info p { font-size: 11px; color: var(--text-muted); }
+  .daftar-arrow {
+    margin-left: auto;
+    color: var(--text-muted);
+    font-size: 16px;
+  }
+  .alokasi-row {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 8px;
+    margin-top: 10px;
+  }
+  .alokasi-item {
+    background: var(--navy);
+    border-radius: var(--r-md);
+    padding: 10px;
+    text-align: center;
+  }
+  .alokasi-item .al-num {
+    font-family: var(--font-display);
+    font-size: 20px;
+    font-weight: 800;
+    color: var(--gold-light);
+    display: block;
+  }
+  .alokasi-item .al-label {
+    font-size: 10px;
+    color: rgba(255,255,255,0.6);
+    display: block;
+    margin-top: 2px;
+  }
+
+  /* ===== TUJUAN PEMBELAJARAN ===== */
+  .tp-grid {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 10px;
+  }
+  .tp-item {
+    background: var(--white);
+    border: 0.5px solid var(--border);
+    border-radius: var(--r-lg);
+    padding: 14px 16px;
+    display: flex;
+    align-items: flex-start;
+    gap: 12px;
+  }
+  .tp-num {
+    width: 28px; height: 28px;
+    border-radius: 50%;
+    background: var(--gold-pale);
+    border: 1.5px solid var(--gold);
+    color: var(--navy);
+    font-family: var(--font-display);
+    font-size: 12px;
+    font-weight: 800;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+    margin-top: 1px;
+  }
+  .tp-content h4 { font-size: 13px; color: var(--navy); font-weight: 600; margin-bottom: 4px; line-height: 1.5; }
+  .tp-content p { font-size: 11.5px; color: var(--text-muted); line-height: 1.6; }
+  .bloom-tag {
+    display: inline-block;
+    font-size: 10px;
+    padding: 2px 8px;
+    border-radius: var(--r-full);
+    font-weight: 600;
+    margin-top: 5px;
+  }
+  .bloom-c1 { background: #E6F1FB; color: #185FA5; }
+  .bloom-c2 { background: #EEEDFE; color: #3C3489; }
+  .bloom-c3 { background: #EAF3DE; color: #3B6D11; }
+  .bloom-c4 { background: #FAEEDA; color: #633806; }
+
+  /* ===== MATERI UTAMA ===== */
+  .orientasi-box {
+    background: var(--navy);
+    border-radius: var(--r-lg);
+    padding: 1.25rem;
+    margin-bottom: 1rem;
+    position: relative;
+    overflow: hidden;
+  }
+  .orientasi-box::after {
+    content: '❓';
+    position: absolute;
+    right: 16px; top: 50%;
+    transform: translateY(-50%);
+    font-size: 48px;
+    opacity: 0.15;
+  }
+  .orientasi-box h3 { font-size: 15px; color: var(--gold-light); margin-bottom: 6px; }
+  .orientasi-box p { font-size: 13px; color: rgba(255,255,255,0.8); line-height: 1.7; }
+  .video-link-btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    background: rgba(240,200,66,0.18);
+    border: 1px solid var(--gold);
+    border-radius: var(--r-full);
+    padding: 7px 14px;
+    color: var(--gold-light);
+    font-size: 12px;
+    font-weight: 600;
+    cursor: pointer;
+    margin-top: 10px;
+    text-decoration: none;
+  }
+  .konsep-row {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 10px;
+    margin-bottom: 1rem;
+  }
+  .konsep-card {
+    background: var(--white);
+    border: 0.5px solid var(--border);
+    border-radius: var(--r-lg);
+    padding: 1rem;
+  }
+  .konsep-card h4 {
+    font-size: 13px; font-weight: 700;
+    color: var(--navy); margin-bottom: 8px;
+    display: flex; align-items: center; gap: 6px;
+  }
+  .konsep-card p { font-size: 12px; color: var(--text-mid); line-height: 1.7; }
+  .rumus-box {
+    background: var(--gold-pale);
+    border: 1px solid var(--gold);
+    border-radius: var(--r-md);
+    padding: 10px 14px;
+    margin-top: 8px;
+    text-align: center;
+  }
+  .rumus-box .rumus-text {
+    font-family: var(--font-display);
+    font-size: 15px;
+    font-weight: 700;
+    color: var(--navy);
+  }
+  .rumus-box .rumus-label { font-size: 10px; color: var(--text-muted); margin-top: 3px; }
+  .sampel-visual {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 5px;
+    margin-top: 6px;
+  }
+  .sampel-chip {
+    background: var(--navy);
+    color: var(--gold-light);
+    border-radius: var(--r-sm);
+    padding: 3px 9px;
+    font-size: 11px;
+    font-weight: 600;
+    font-family: var(--font-display);
+  }
+  .pbl-badge-row {
+    display: flex;
+    gap: 6px;
+    margin-bottom: 1rem;
+    flex-wrap: wrap;
+  }
+
+  /* ===== LKPD ===== */
+  .aktivitas-header {
+    background: var(--navy);
+    border-radius: var(--r-lg) var(--r-lg) 0 0;
+    padding: 12px 16px;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+  }
+  .aktivitas-num {
+    background: var(--gold);
+    color: var(--navy);
+    width: 28px; height: 28px;
+    border-radius: 50%;
+    font-family: var(--font-display);
+    font-size: 13px;
+    font-weight: 800;
+    display: flex; align-items: center; justify-content: center;
+    flex-shrink: 0;
+  }
+  .aktivitas-header h3 { font-size: 14px; color: #fff; font-weight: 600; }
+  .aktivitas-body {
+    background: var(--white);
+    border: 0.5px solid var(--border);
+    border-top: none;
+    border-radius: 0 0 var(--r-lg) var(--r-lg);
+    padding: 1rem 1.25rem;
+    margin-bottom: 1rem;
+  }
+  .langkah-row {
+    display: flex;
+    gap: 8px;
+    align-items: flex-start;
+    margin-bottom: 8px;
+  }
+  .langkah-dot {
+    width: 22px; height: 22px;
+    border-radius: 50%;
+    background: var(--gold-pale);
+    border: 1.5px solid var(--gold);
+    color: var(--navy);
+    font-size: 11px;
+    font-weight: 700;
+    display: flex; align-items: center; justify-content: center;
+    flex-shrink: 0;
+    margin-top: 1px;
+  }
+  .langkah-text { font-size: 12.5px; color: var(--text-mid); line-height: 1.6; }
+  .tabel-wrap { overflow-x: auto; margin: 10px 0; }
+  .tabel-data {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 12px;
+  }
+  .tabel-data th {
+    background: var(--navy);
+    color: var(--gold-light);
+    padding: 7px 10px;
+    font-weight: 600;
+    font-family: var(--font-display);
+    font-size: 11px;
+  }
+  .tabel-data td {
+    border: 0.5px solid var(--border);
+    padding: 6px 10px;
+    color: var(--text-mid);
+  }
+  .tabel-data tr:nth-child(even) td { background: #F8F9FC; }
+  .input-mini {
+    width: 60px;
+    text-align: center;
+    border: 0.5px solid var(--border);
+    border-radius: var(--r-sm);
+    padding: 3px 6px;
+    font-size: 12px;
+    font-family: var(--font-body);
+  }
+  .kritis-box {
+    background: #E6F1FB;
+    border: 0.5px solid #B5D4F4;
+    border-radius: var(--r-md);
+    padding: 10px 14px;
+    margin-top: 10px;
+  }
+  .kritis-box h5 { font-size: 12px; color: #185FA5; font-weight: 700; margin-bottom: 5px; display: flex; align-items: center; gap: 5px; }
+  .kritis-box p { font-size: 12px; color: #185FA5; line-height: 1.6; font-style: italic; }
+
+  /* ===== EVALUASI ===== */
+  .soal-card {
+    background: var(--white);
+    border: 0.5px solid var(--border);
+    border-radius: var(--r-lg);
+    padding: 1rem 1.25rem;
+    margin-bottom: 1rem;
+  }
+  .soal-num { font-size: 11px; font-weight: 700; color: var(--text-muted); margin-bottom: 6px; letter-spacing: 0.5px; text-transform: uppercase; }
+  .soal-text { font-size: 13.5px; color: var(--text-dark); line-height: 1.7; margin-bottom: 12px; font-weight: 500; }
+  .pilihan-row {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 7px;
+    margin-bottom: 10px;
+  }
+  .pilihan-btn {
+    background: #F6F7FA;
+    border: 0.5px solid var(--border);
+    border-radius: var(--r-md);
+    padding: 9px 12px;
+    font-family: var(--font-body);
+    font-size: 12.5px;
+    color: var(--text-mid);
+    cursor: pointer;
+    text-align: left;
+    transition: background 0.15s, border-color 0.15s;
+    display: flex;
+    align-items: flex-start;
+    gap: 8px;
+  }
+  .pilihan-btn:hover { border-color: var(--navy-light); background: #EEF2FB; }
+  .pilihan-btn.benar { background: #EAF3DE; border-color: #1D9E75; color: #085041; }
+  .pilihan-btn.salah { background: #FCEBEB; border-color: #E24B4A; color: #501313; }
+  .pilihan-letter {
+    font-family: var(--font-display);
+    font-size: 11px;
+    font-weight: 700;
+    width: 18px; height: 18px;
+    border-radius: 50%;
+    background: rgba(11,31,79,0.08);
+    display: flex; align-items: center; justify-content: center;
+    flex-shrink: 0;
+  }
+  .cek-btn {
+    background: var(--navy);
+    color: #fff;
+    border: none;
+    border-radius: var(--r-full);
+    padding: 8px 18px;
+    font-family: var(--font-display);
+    font-size: 12px;
+    font-weight: 700;
+    cursor: pointer;
+    transition: background 0.2s;
+    display: flex;
+    align-items: center;
+    gap: 5px;
+  }
+  .cek-btn:hover { background: var(--navy-light); }
+  .pembahasan-box {
+    background: var(--gold-pale);
+    border: 0.5px solid var(--gold);
+    border-radius: var(--r-md);
+    padding: 10px 14px;
+    font-size: 12px;
+    color: var(--navy);
+    line-height: 1.7;
+    margin-top: 8px;
+    display: none;
+  }
+  .pembahasan-box.show { display: block; }
+  .pembahasan-box strong { color: var(--navy); }
+  .hasil-badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 5px;
+    font-size: 12px;
+    font-weight: 600;
+    padding: 4px 12px;
+    border-radius: var(--r-full);
+    margin-right: 8px;
+  }
+  .hasil-badge.benar { background: #EAF3DE; color: #0F6E56; }
+  .hasil-badge.salah { background: #FCEBEB; color: #A32D2D; }
+
+  /* ===== REFLEKSI ===== */
+  .refleksi-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 10px;
+    margin-bottom: 1rem;
+  }
+  .refleksi-item {
+    background: var(--white);
+    border: 2px solid var(--border);
+    border-radius: var(--r-lg);
+    padding: 1rem;
+    text-align: center;
+    cursor: pointer;
+    transition: border-color 0.2s, transform 0.15s;
+  }
+  .refleksi-item:hover { transform: translateY(-2px); }
+  .refleksi-item.selected.paham { border-color: #1D9E75; background: #EAF3DE; }
+  .refleksi-item.selected.cukup { border-color: var(--gold); background: var(--gold-pale); }
+  .refleksi-item.selected.butuh { border-color: #E24B4A; background: #FCEBEB; }
+  .refleksi-emoji { font-size: 36px; display: block; margin-bottom: 8px; }
+  .refleksi-label { font-size: 12px; font-weight: 600; color: var(--text-dark); }
+  .refleksi-pesan {
+    background: var(--white);
+    border: 0.5px solid var(--border);
+    border-radius: var(--r-md);
+    padding: 12px;
+    font-size: 12.5px;
+    color: var(--text-mid);
+    line-height: 1.7;
+    display: none;
+    margin-bottom: 1rem;
+  }
+  .refleksi-pesan.show { display: block; }
+
+  /* ===== GLOSARIUM ===== */
+  .glos-item {
+    border-bottom: 0.5px solid var(--border);
+    padding: 12px 0;
+    display: flex;
+    align-items: flex-start;
+    gap: 12px;
+  }
+  .glos-item:last-child { border-bottom: none; }
+  .glos-term {
+    font-family: var(--font-display);
+    font-size: 13px;
+    font-weight: 800;
+    color: var(--navy);
+    min-width: 120px;
+    flex-shrink: 0;
+  }
+  .glos-def { font-size: 12.5px; color: var(--text-mid); line-height: 1.6; }
+
+  /* ===== PENUTUP ===== */
+  .penutup-cover {
+    background: var(--navy);
+    border-radius: var(--r-lg);
+    padding: 2rem 1.5rem;
+    text-align: center;
+    position: relative;
+    overflow: hidden;
+    margin-bottom: 1rem;
+  }
+  .penutup-cover::before {
+    content: '';
+    position: absolute;
+    top: -50px; right: -50px;
+    width: 200px; height: 200px;
+    border-radius: 50%;
+    border: 35px solid rgba(201,162,39,0.1);
+  }
+  .penutup-icon { font-size: 50px; margin-bottom: 10px; position: relative; z-index: 2; }
+  .penutup-cover h2 {
+    font-family: var(--font-display);
+    font-size: 22px;
+    color: #fff;
+    font-weight: 800;
+    margin-bottom: 6px;
+    position: relative; z-index: 2;
+  }
+  .penutup-cover p {
+    font-size: 13px;
+    color: rgba(255,255,255,0.7);
+    line-height: 1.7;
+    position: relative; z-index: 2;
+  }
+  .penutup-religius {
+    background: var(--gold-pale);
+    border: 1px solid var(--gold);
+    border-radius: var(--r-md);
+    padding: 1rem 1.25rem;
+    text-align: center;
+    margin-bottom: 1rem;
+  }
+  .penutup-religius .arab { font-size: 20px; color: var(--navy); margin-bottom: 6px; font-style: italic; }
+  .penutup-religius p { font-size: 12px; color: var(--text-mid); line-height: 1.6; }
+  .credit-row {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 10px 0;
+    border-top: 0.5px solid var(--border);
+    font-size: 11px;
+    color: var(--text-muted);
+  }
+
+  /* padding for slide content */
+  .slide-content { padding: 1rem 1.25rem; }
+
+  /* divider */
+  .divider { height: 0.5px; background: var(--border); margin: 12px 0; }
+</style>
+
+<h2 class="sr-only">Media Pembelajaran Interaktif Matematika - Misi Eksplorasi Peluang Kelas VIII</h2>
+
+<div class="app-container">
+  <!-- NAV -->
+  <div class="nav-bar">
+    <span class="logo">📐 Eksplorasi Peluang</span>
+    <div class="progress-wrap">
+      <div class="progress-bar"><div class="progress-fill" id="progressFill" style="width:12.5%"></div></div>
+      <span class="slide-counter" id="slideCounter">1 / 10</span>
+    </div>
+    <button class="btn-home" onclick="goTo(0)">🏠 Menu</button>
+  </div>
+
+  <!-- SLIDE 1: COVER -->
+  <div class="slide active" id="slide-0">
+    <div class="cover">
+      <div class="cover-bg-circles"></div>
+      <div class="cover-bg-circles-2"></div>
+      <!-- SVG Illustration -->
+      <div class="cover-illustration">
+        <svg viewBox="0 0 160 200" xmlns="http://www.w3.org/2000/svg" fill="none">
+          <!-- Probability tree branches -->
+          <line x1="80" y1="30" x2="40" y2="90" stroke="#e8783a" stroke-width="2.5" stroke-linecap="round" opacity="0.7"/>
+          <line x1="80" y1="30" x2="120" y2="90" stroke="#e8783a" stroke-width="2.5" stroke-linecap="round" opacity="0.7"/>
+          <line x1="40" y1="90" x2="20" y2="145" stroke="#f4a87a" stroke-width="2" stroke-linecap="round" opacity="0.65"/>
+          <line x1="40" y1="90" x2="62" y2="145" stroke="#f4a87a" stroke-width="2" stroke-linecap="round" opacity="0.65"/>
+          <line x1="120" y1="90" x2="98" y2="145" stroke="#f4a87a" stroke-width="2" stroke-linecap="round" opacity="0.65"/>
+          <line x1="120" y1="90" x2="140" y2="145" stroke="#f4a87a" stroke-width="2" stroke-linecap="round" opacity="0.65"/>
+          <!-- Root node -->
+          <circle cx="80" cy="30" r="13" fill="#e8601a" opacity="0.95"/>
+          <text x="80" y="35" text-anchor="middle" font-size="13" font-family="serif" font-weight="bold" fill="white">S</text>
+          <!-- Level 1 nodes -->
+          <circle cx="40" cy="90" r="11" fill="#ff8c5a" opacity="0.9"/>
+          <text x="40" y="95" text-anchor="middle" font-size="10" font-family="serif" font-weight="bold" fill="white">A</text>
+          <circle cx="120" cy="90" r="11" fill="#ff8c5a" opacity="0.9"/>
+          <text x="120" y="95" text-anchor="middle" font-size="10" font-family="serif" font-weight="bold" fill="white">B</text>
+          <!-- Level 2 nodes (leaf) -->
+          <circle cx="20" cy="145" r="9" fill="#ffc2a0" opacity="0.9"/>
+          <text x="20" y="149" text-anchor="middle" font-size="8" font-family="serif" fill="#8a3510">¼</text>
+          <circle cx="62" cy="145" r="9" fill="#ffc2a0" opacity="0.9"/>
+          <text x="62" y="149" text-anchor="middle" font-size="8" font-family="serif" fill="#8a3510">¼</text>
+          <circle cx="98" cy="145" r="9" fill="#ffc2a0" opacity="0.9"/>
+          <text x="98" y="149" text-anchor="middle" font-size="8" font-family="serif" fill="#8a3510">¼</text>
+          <circle cx="140" cy="145" r="9" fill="#ffc2a0" opacity="0.9"/>
+          <text x="140" y="149" text-anchor="middle" font-size="8" font-family="serif" fill="#8a3510">¼</text>
+          <!-- Fraction labels on branches -->
+          <text x="54" y="58" text-anchor="middle" font-size="9" font-family="sans-serif" fill="#c94d10" font-weight="600">½</text>
+          <text x="108" y="58" text-anchor="middle" font-size="9" font-family="sans-serif" fill="#c94d10" font-weight="600">½</text>
+          <!-- Dice icon area -->
+          <rect x="60" y="165" width="40" height="30" rx="5" fill="#fff" opacity="0.7" stroke="#f4a87a" stroke-width="1.5"/>
+          <circle cx="70" cy="175" r="2.5" fill="#e8601a"/>
+          <circle cx="80" cy="180" r="2.5" fill="#e8601a"/>
+          <circle cx="90" cy="175" r="2.5" fill="#e8601a"/>
+          <circle cx="70" cy="185" r="2.5" fill="#e8601a"/>
+          <circle cx="90" cy="185" r="2.5" fill="#e8601a"/>
+          <!-- Coin sparkle -->
+          <circle cx="140" cy="40" r="16" fill="#ffd5b8" stroke="#e8783a" stroke-width="1.5" opacity="0.85"/>
+          <text x="140" y="45" text-anchor="middle" font-size="14" fill="#c94d10" font-weight="bold">50%</text>
+          <!-- Stars / sparkles -->
+          <text x="10" y="60" font-size="14" opacity="0.5">✦</text>
+          <text x="148" y="120" font-size="10" opacity="0.4">✦</text>
+          <text x="5" y="175" font-size="9" opacity="0.35">✦</text>
+        </svg>
+      </div>
+
+      <div class="cover-top">
+        <div class="cover-badge-row">
+          <span class="badge navy">📚 Matematika Fase D</span>
+          <span class="badge gold">Kelas VIII</span>
+          <span class="badge green">PBL + STEM</span>
+        </div>
+        <div class="cover-title">PELUANG</div>
+        <span class="cover-title-sub">Media Pembelajaran Matematika</span>
+        <p class="cover-tagline">Petualangan sains &amp; matematika untuk memahami peluang dalam kehidupan nyata — dari lemparan koin hingga prediksi cuaca digital.</p>
+        <div class="cover-stem-row">
+          <div class="stem-card"><span class="stem-icon">🔬</span><span class="stem-letter">S</span><span class="stem-word">Science</span></div>
+          <div class="stem-card"><span class="stem-icon">⚙️</span><span class="stem-letter">T</span><span class="stem-word">Technology</span></div>
+          <div class="stem-card"><span class="stem-icon">🏗️</span><span class="stem-letter">E</span><span class="stem-word">Engineering</span></div>
+          <div class="stem-card"><span class="stem-icon">📐</span><span class="stem-letter">M</span><span class="stem-word">Mathematics</span></div>
+        </div>
+        <div class="cover-meta">
+          <span class="cover-meta-item">📖 <strong>Model:</strong> Problem-Based Learning</span>
+          <span class="cover-meta-item">🧠 <strong>Pendekatan:</strong> Deep Learning</span>
+          <span class="cover-meta-item">⏱️ <strong>Durasi:</strong> 2 × 40 menit</span>
+        </div>
+      </div>
+      <button class="cover-cta" onclick="goTo(1)">🚀 Mulai Belajar Sekarang →</button>
+    </div>
+  </div>
+
+  <!-- SLIDE 2: KATA PENGANTAR -->
+  <div class="slide" id="slide-1">
+    <div class="section-header">
+      <span class="badge navy">📝 Kata Pengantar</span>
+      <div class="slide-title" style="margin-top:8px">Halo, Penjelajah Muda! 👋</div>
+      <p class="slide-subtitle">Pesan khusus untuk kamu sebelum memulai petualangan belajar</p>
+    </div>
+    <div class="slide-content">
+      <div class="pengantar-quote">
+        "Tahukah kamu? Setiap hari kita sudah menggunakan peluang — dari ramalan cuaca di HP, peluang menang dalam game online, hingga keputusan investasi para profesional. Matematika peluang adalah kunci memahami dunia yang penuh ketidakpastian!"
+      </div>
+      <p class="pengantar-body">
+        Sobat SMP yang keren! Di era digital yang serba canggih ini, kemampuan berpikir probabilistik — atau berpikir dengan logika peluang — adalah salah satu skill paling berharga yang bisa kamu miliki. Media pembelajaran ini dirancang khusus agar kamu bisa <strong>belajar sambil bereksperimen</strong>, bukan hanya menghafal rumus!
+      </p>
+      <div class="contoh-grid">
+        <div class="contoh-item">
+          <span class="contoh-icon">🌤️</span>
+          <div class="contoh-text"><h4>Prakiraan Cuaca</h4><p>BMKG menggunakan peluang 70% hujan berdasarkan data historis &amp; simulasi.</p></div>
+        </div>
+        <div class="contoh-item">
+          <span class="contoh-icon">🎮</span>
+          <div class="contoh-text"><h4>Game &amp; Gacha</h4><p>Rate drop item langka dalam game online dihitung dengan peluang matematika.</p></div>
+        </div>
+        <div class="contoh-item">
+          <span class="contoh-icon">🏥</span>
+          <div class="contoh-text"><h4>Dunia Medis</h4><p>Dokter menggunakan peluang untuk menilai efektivitas sebuah pengobatan.</p></div>
+        </div>
+        <div class="contoh-item">
+          <span class="contoh-icon">📈</span>
+          <div class="contoh-text"><h4>Investasi &amp; Saham</h4><p>Analisis risiko investasi selalu melibatkan perhitungan peluang keuntungan.</p></div>
+        </div>
+      </div>
+      <div class="card gold-card" style="text-align:center;">
+        <p style="font-size:13px;color:var(--navy);line-height:1.7;"><strong>🎯 Ingat ya!</strong> Di media ini kamu akan <strong>menemukan sendiri</strong> konsep peluang melalui eksperimen, bukan hanya menerima jawaban jadi. Semangat belajar, ya! 💪</p>
+      </div>
+    </div>
+  </div>
+
+  <!-- SLIDE 3: DAFTAR ISI -->
+  <div class="slide" id="slide-2">
+    <div class="section-header">
+      <span class="badge navy">🗺️ Navigasi Utama</span>
+      <div class="slide-title" style="margin-top:8px">Peta Perjalanan Belajar</div>
+      <p class="slide-subtitle">Pilih bagian yang ingin kamu jelajahi</p>
+    </div>
+    <div class="slide-content">
+      <div class="daftar-isi-grid">
+        <div class="daftar-item" onclick="goTo(3)">
+          <div class="daftar-num">A</div>
+          <div class="daftar-info"><h4>Tujuan &amp; Indikator Pembelajaran</h4><p>Apa yang akan kamu capai hari ini?</p></div>
+          <span class="daftar-arrow">→</span>
+        </div>
+        <div class="daftar-item" onclick="goTo(4)">
+          <div class="daftar-num">B</div>
+          <div class="daftar-info"><h4>Menu Utama Materi</h4><p>Ruang Sampel, Peluang Teoretik &amp; Empirik</p></div>
+          <span class="daftar-arrow">→</span>
+        </div>
+        <div class="daftar-item" onclick="goTo(5)">
+          <div class="daftar-num">C</div>
+          <div class="daftar-info"><h4>Ruang Eksperimen (LKPD)</h4><p>Aktivitas interaktif koin &amp; dadu digital</p></div>
+          <span class="daftar-arrow">→</span>
+        </div>
+        <div class="daftar-item" onclick="goTo(6)">
+          <div class="daftar-num">D</div>
+          <div class="daftar-info"><h4>LKPD Prakiraan Cuaca</h4><p>Analisis data cuaca &amp; peluang empirik</p></div>
+          <span class="daftar-arrow">→</span>
+        </div>
+        <div class="daftar-item" onclick="goTo(8)">
+          <div class="daftar-num">E</div>
+          <div class="daftar-info"><h4>Evaluasi Formatif</h4><p>Uji pemahamanmu dengan soal interaktif</p></div>
+          <span class="daftar-arrow">→</span>
+        </div>
+        <div class="daftar-item" onclick="goTo(9)">
+          <div class="daftar-num">F</div>
+          <div class="daftar-info"><h4>Refleksi &amp; Glosarium</h4><p>Ukur pemahamanmu &amp; kamus istilah penting</p></div>
+          <span class="daftar-arrow">→</span>
+        </div>
+      </div>
+      <div class="divider"></div>
+      <p style="font-size:12px;color:var(--text-muted);margin-bottom:8px;font-weight:600;">⏱️ Alokasi Waktu Pembelajaran</p>
+      <div class="alokasi-row">
+        <div class="alokasi-item"><span class="al-num">15'</span><span class="al-label">Orientasi Masalah</span></div>
+        <div class="alokasi-item"><span class="al-num">45'</span><span class="al-label">Eksplorasi &amp; LKPD</span></div>
+        <div class="alokasi-item"><span class="al-num">20'</span><span class="al-label">Evaluasi &amp; Refleksi</span></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- SLIDE 4: TUJUAN & INDIKATOR -->
+  <div class="slide" id="slide-3">
+    <div class="section-header">
+      <span class="badge navy">🎯 Tujuan Pembelajaran</span>
+      <div class="slide-title" style="margin-top:8px">Apa yang Akan Kamu Capai?</div>
+      <p class="slide-subtitle">Fase D • Kelas VIII • Materi: Peluang</p>
+    </div>
+    <div class="slide-content">
+      <div class="tp-grid">
+        <div class="tp-item">
+          <div class="tp-num">1</div>
+          <div class="tp-content">
+            <h4>Menentukan Ruang Sampel &amp; Titik Sampel</h4>
+            <p>Mampu mengidentifikasi semua kemungkinan hasil (ruang sampel) dan titik sampel dari percobaan pelemparan koin dan dadu secara akurat.</p>
+            <span class="bloom-tag bloom-c2">C2 – Memahami</span>
+          </div>
+        </div>
+        <div class="tp-item">
+          <div class="tp-num">2</div>
+          <div class="tp-content">
+            <h4>Peluang Teoretik</h4>
+            <p>Menganalisis hubungan antara banyak kejadian dengan ruang sampel untuk menentukan nilai peluang secara teoretik.</p>
+            <span class="bloom-tag bloom-c4">C4 – Menganalisis</span>
+          </div>
+        </div>
+        <div class="tp-item">
+          <div class="tp-num">3</div>
+          <div class="tp-content">
+            <h4>Mempresentasikan Peluang Empirik</h4>
+            <p>Menyajikan peluang empirik (frekuensi relatif) berdasarkan data hasil eksperimen nyata yang dilakukan sendiri.</p>
+            <span class="bloom-tag bloom-c4">C4 – Menganalisis</span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- SLIDE 5: MATERI UTAMA -->
+  <div class="slide" id="slide-4">
+    <div class="section-header">
+      <span class="badge navy">📖 Materi Utama</span>
+      <div class="slide-title" style="margin-top:8px">Konsep Dasar Peluang</div>
+      <p class="slide-subtitle">Orientasi Masalah — Sintaks PBL ke-1</p>
+    </div>
+    <div class="slide-content">
+      <div class="pbl-badge-row">
+        <span class="badge blue">PBL Sintaks 1: Orientasi Masalah</span>
+        <span class="badge green">Deep Learning: Bermakna</span>
+      </div>
+      <div class="orientasi-box">
+        <h3>🤔 Coba Pikirkan Ini...</h3>
+        <p>Kamu melempar sebuah koin. Menurutmu, berapa peluang munculnya sisi "Angka"? Apakah peluangnya pasti tepat 50%? Lalu bagaimana jika koin itu sudah dilempar 1.000 kali — apakah hasilnya akan selalu tepat 500 kali angka dan 500 kali gambar?</p>
+        <a class="video-link-btn" href="https://www.youtube.com/shorts" target="_blank">▶️ Tonton Video Tebak Peluang (YouTube Shorts)</a>
+      </div>
+      <div class="konsep-row">
+        <div class="konsep-card">
+          <h4>🎲 Ruang Sampel (S)</h4>
+          <p>Himpunan semua hasil yang <strong>mungkin terjadi</strong> dari suatu percobaan acak.</p>
+          <div class="sampel-visual">
+            <span style="font-size:11px;color:var(--text-muted);width:100%;margin-bottom:2px">Koin: S = {A, G}</span>
+            <span class="sampel-chip">A</span><span class="sampel-chip">G</span>
+          </div>
+          <div class="sampel-visual" style="margin-top:8px">
+            <span style="font-size:11px;color:var(--text-muted);width:100%;margin-bottom:2px">Dadu: S = {1,2,3,4,5,6}</span>
+            <span class="sampel-chip">1</span><span class="sampel-chip">2</span><span class="sampel-chip">3</span><span class="sampel-chip">4</span><span class="sampel-chip">5</span><span class="sampel-chip">6</span>
+          </div>
+        </div>
+        <div class="konsep-card">
+          <h4>📌 Titik Sampel</h4>
+          <p>Setiap <strong>anggota</strong> dari ruang sampel. Satu kemungkinan hasil tunggal dari percobaan.</p>
+          <div style="margin-top:8px;padding:8px;background:#F6F7FA;border-radius:var(--r-sm);">
+            <p style="font-size:11px;color:var(--text-muted)">Contoh: Pada dadu, titik sampel "3" berarti dadu berhenti tepat di angka 3.</p>
+          </div>
+          <div style="margin-top:8px;font-size:12px;color:var(--text-muted);">n(S) = banyaknya titik sampel</div>
+        </div>
+      </div>
+      <div class="konsep-row">
+        <div class="konsep-card">
+          <h4>📐 Peluang Teoretik</h4>
+          <p>Peluang yang dihitung berdasarkan <strong>logika/rumus matematika</strong>, bukan percobaan nyata.</p>
+          <div class="rumus-box">
+            <div class="rumus-text">P(A) = n(A) / n(S)</div>
+            <div class="rumus-label">n(A) = banyak kejadian A • n(S) = banyak ruang sampel</div>
+          </div>
+        </div>
+        <div class="konsep-card">
+          <h4>📊 Peluang Empirik</h4>
+          <p>Peluang yang diperoleh dari <strong>data hasil percobaan nyata</strong> (frekuensi relatif).</p>
+          <div class="rumus-box">
+            <div class="rumus-text">P(A) = f(A) / n</div>
+            <div class="rumus-label">f(A) = frekuensi kejadian A • n = banyak percobaan</div>
+          </div>
+        </div>
+      </div>
+      <div class="card" style="border-left:3px solid var(--gold);">
+        <p style="font-size:12.5px;color:var(--text-mid);line-height:1.7;">
+          💡 <strong>Ingat:</strong> Nilai peluang selalu berada antara 0 ≤ P(A) ≤ 1. Jika P(A) = 0 → <strong>mustahil</strong>. Jika P(A) = 1 → <strong>pasti terjadi</strong>. Di antaranya → <strong>mungkin terjadi</strong>.
+        </p>
+      </div>
+    </div>
+  </div>
+
+  <!-- SLIDE 6: LKPD INTERAKTIF -->
+  <div class="slide" id="slide-5">
+    <div class="section-header">
+      <span class="badge navy">🧪 Ruang Eksperimen</span>
+      <div class="slide-title" style="margin-top:8px">LKPD Digital Interaktif</div>
+      <p class="slide-subtitle">Saatnya jadi ilmuwan! Lakukan eksperimen &amp; analisis datamu sendiri.</p>
+    </div>
+    <div class="slide-content">
+      <!-- Aktivitas 1 -->
+      <div class="aktivitas-header">
+        <div class="aktivitas-num">1</div>
+        <h3>Aktivitas Koin Logam — Peluang Empirik</h3>
+      </div>
+      <div class="aktivitas-body">
+        <div class="langkah-row"><div class="langkah-dot">1</div><div class="langkah-text">Ambil sebuah koin logam (koin Rp 500 atau Rp 1.000).</div></div>
+        <div class="langkah-row"><div class="langkah-dot">2</div><div class="langkah-text">Lempar koin sebanyak <strong>20 kali</strong>. Catat setiap hasilnya (A = Angka / G = Gambar) pada tabel di bawah.</div></div>
+        <div class="langkah-row"><div class="langkah-dot">3</div><div class="langkah-text">Hitung frekuensi kemunculan Angka dan Gambar, lalu hitung frekuensi relatifnya.</div></div>
+        <div class="tabel-wrap">
+          <table class="tabel-data">
+            <thead><tr><th>Lemparan ke-</th><th>Hasil (A/G)</th><th>Lemparan ke-</th><th>Hasil (A/G)</th></tr></thead>
+            <tbody id="koinTabel">
+            </tbody>
+          </table>
+        </div>
+        <div style="display:grid;grid-template-columns:1fr 1fr;gap:8px;margin:10px 0;">
+          <div style="background:#F6F7FA;border-radius:var(--r-md);padding:10px;text-align:center;">
+            <div style="font-size:11px;color:var(--text-muted);margin-bottom:4px;">Frekuensi Angka (A)</div>
+            <input class="input-mini" id="freqAngka" type="number" min="0" max="20" placeholder="0"> / 20
+          </div>
+          <div style="background:#F6F7FA;border-radius:var(--r-md);padding:10px;text-align:center;">
+            <div style="font-size:11px;color:var(--text-muted);margin-bottom:4px;">Frekuensi Gambar (G)</div>
+            <input class="input-mini" id="freqGambar" type="number" min="0" max="20" placeholder="0"> / 20
+          </div>
+        </div>
+        <div style="background:var(--gold-pale);border-radius:var(--r-md);padding:10px;text-align:center;margin-bottom:10px;">
+          <div style="font-size:11px;color:var(--text-muted);margin-bottom:4px;">Peluang Empirik P(Angka)</div>
+          <div style="font-size:16px;font-weight:800;color:var(--navy);font-family:var(--font-display);" id="hasilEmpirik">— / 20 = —</div>
+        </div>
+        <button class="cek-btn" onclick="hitungEmpirik()">🔢 Hitung Otomatis</button>
+        <div class="kritis-box" style="margin-top:10px;">
+          <h5>💬 Pertanyaan Kritis</h5>
+          <p>Apakah hasil peluang empirikmu (dari percobaan nyata) sama persis dengan peluang teoretik (P = 1/2 = 0,5)? Mengapa bisa berbeda? Apa yang terjadi jika kamu menambah jumlah percobaan menjadi 100 atau 1000 kali?</p>
+        </div>
+      </div>
+
+      <!-- Aktivitas 2 -->
+      <div class="aktivitas-header">
+        <div class="aktivitas-num">2</div>
+        <h3>Aktivitas Dadu Digital — Simulator STEM</h3>
+      </div>
+      <div class="aktivitas-body">
+        <div style="display:flex;align-items:center;gap:8px;margin-bottom:10px;flex-wrap:wrap;">
+          <span class="badge blue">⚙️ Technology</span>
+          <span class="badge green">🔬 Engineering</span>
+          <span style="font-size:12px;color:var(--text-muted);">Menggunakan simulator digital</span>
+        </div>
+        <div class="langkah-row"><div class="langkah-dot">1</div><div class="langkah-text">Gunakan simulator dadu di bawah ini. Klik tombol <strong>"Lempar Dadu"</strong> untuk mendapatkan hasil acak.</div></div>
+        <div class="langkah-row"><div class="langkah-dot">2</div><div class="langkah-text">Lakukan pelemparan minimal <strong>30 kali</strong>. Amati bagaimana grafik frekuensi relatif berubah seiring bertambahnya percobaan.</div></div>
+        <div class="langkah-row"><div class="langkah-dot">3</div><div class="langkah-text">Catat apakah frekuensi relatif tiap angka semakin mendekati 1/6 ≈ 0,167 saat percobaan diperbanyak.</div></div>
+        <div style="display:flex;align-items:center;justify-content:space-between;margin:12px 0 8px;">
+          <div id="daduan" style="font-size:56px;text-align:center;width:70px;height:70px;display:flex;align-items:center;justify-content:center;background:var(--navy);border-radius:var(--r-md);">🎲</div>
+          <div style="text-align:center;">
+            <div style="font-size:11px;color:var(--text-muted);margin-bottom:4px;">Total Lemparan</div>
+            <div style="font-size:24px;font-weight:800;color:var(--navy);font-family:var(--font-display);" id="totalLempar">0</div>
+          </div>
+          <button class="btn-nav gold" onclick="lemparDadu()" style="height:fit-content;">🎲 Lempar Dadu</button>
+        </div>
+        <div style="display:grid;grid-template-columns:repeat(6,1fr);gap:5px;margin:8px 0;" id="daduGrid"></div>
+        <a class="video-link-btn" href="https://docs.google.com/spreadsheets" target="_blank" style="margin-top:8px;display:inline-flex;">📊 Buka Google Spreadsheet untuk grafik lanjutan →</a>
+        <div class="kritis-box" style="margin-top:10px;">
+          <h5>💬 Pertanyaan Kritis</h5>
+          <p>Perhatikan grafik frekuensi relatifmu. Apakah semakin banyak percobaan, hasilnya semakin mendekati nilai teori 1/6? Konsep apa yang bisa kamu simpulkan dari fenomena ini? (Petunjuk: Hukum Bilangan Besar)</p>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- SLIDE 7: LKPD PRAKIRAAN CUACA -->
+  <div class="slide" id="slide-6">
+    <div class="section-header">
+      <span class="badge navy">🌤️ LKPD Kontekstual</span>
+      <div class="slide-title" style="margin-top:8px">Prakiraan Cuaca &amp; Peluang</div>
+      <p class="slide-subtitle">Sintaks PBL ke-3: Membimbing Penyelidikan — Konteks Dunia Nyata</p>
+    </div>
+    <div class="slide-content">
+
+      <!-- Orientasi Masalah -->
+      <div class="orientasi-box" style="margin-bottom:1rem;">
+        <h3>🌧️ Permasalahan Nyata</h3>
+        <p>BMKG mencatat data cuaca Kota Surakarta selama <strong>30 hari</strong> di bulan Oktober. Hasilnya: <strong>18 hari hujan</strong> dan <strong>12 hari cerah</strong>. Sebagai ilmuwan data muda, dapatkah kamu memprediksi peluang cuaca besok hanya berdasarkan data ini?</p>
+      </div>
+
+      <!-- Tabel Data Cuaca -->
+      <div class="aktivitas-header">
+        <div class="aktivitas-num">A</div>
+        <h3>Data Pengamatan Cuaca 30 Hari</h3>
+      </div>
+      <div class="aktivitas-body">
+        <div class="tabel-wrap">
+          <table class="tabel-data">
+            <thead>
+              <tr>
+                <th>Minggu ke-</th>
+                <th>Hari Hujan</th>
+                <th>Hari Cerah</th>
+                <th>Total Hari</th>
+                <th>P(Hujan) Empirik</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td style="text-align:center;font-weight:600;color:var(--navy)">1</td>
+                <td style="text-align:center">5</td>
+                <td style="text-align:center">2</td>
+                <td style="text-align:center">7</td>
+                <td style="text-align:center"><input class="input-mini" id="cuaca-m1" style="width:60px" placeholder="…/7"></td>
+              </tr>
+              <tr>
+                <td style="text-align:center;font-weight:600;color:var(--navy)">2</td>
+                <td style="text-align:center">4</td>
+                <td style="text-align:center">3</td>
+                <td style="text-align:center">7</td>
+                <td style="text-align:center"><input class="input-mini" id="cuaca-m2" style="width:60px" placeholder="…/7"></td>
+              </tr>
+              <tr>
+                <td style="text-align:center;font-weight:600;color:var(--navy)">3</td>
+                <td style="text-align:center">5</td>
+                <td style="text-align:center">2</td>
+                <td style="text-align:center">7</td>
+                <td style="text-align:center"><input class="input-mini" id="cuaca-m3" style="width:60px" placeholder="…/7"></td>
+              </tr>
+              <tr>
+                <td style="text-align:center;font-weight:600;color:var(--navy)">4</td>
+                <td style="text-align:center">4</td>
+                <td style="text-align:center">5</td>
+                <td style="text-align:center">9</td>
+                <td style="text-align:center"><input class="input-mini" id="cuaca-m4" style="width:60px" placeholder="…/9"></td>
+              </tr>
+              <tr style="background:var(--gold-pale);">
+                <td style="text-align:center;font-weight:700;color:var(--navy)">Total</td>
+                <td style="text-align:center;font-weight:700;color:#c94d10">18</td>
+                <td style="text-align:center;font-weight:700;color:#185fa5">12</td>
+                <td style="text-align:center;font-weight:700;color:var(--navy)">30</td>
+                <td style="text-align:center;font-weight:700;color:var(--navy)" id="cuaca-total-p">—</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+        <div style="display:flex;gap:8px;flex-wrap:wrap;margin-top:10px;">
+          <button class="cek-btn" onclick="hitungCuaca()">🔢 Hitung P(Hujan) Otomatis</button>
+          <button class="cek-btn" style="background:var(--navy);" onclick="cekCuacaJawaban()">✅ Cek Jawabanku</button>
+        </div>
+        <div id="hasil-cuaca" style="display:none;margin-top:10px;padding:10px 14px;background:var(--gold-pale);border-radius:var(--r-md);font-size:13px;color:var(--navy);line-height:1.7;"></div>
+      </div>
+
+      <!-- Pertanyaan Analisis -->
+      <div class="aktivitas-header" style="margin-top:1rem;">
+        <div class="aktivitas-num">B</div>
+        <h3>Analisis &amp; Pertanyaan Eksplorasi</h3>
+      </div>
+      <div class="aktivitas-body">
+        <div style="display:flex;flex-direction:column;gap:12px;">
+
+          <div style="background:#F6F7FA;border-radius:var(--r-md);padding:12px;">
+            <p style="font-size:12.5px;font-weight:600;color:var(--navy);margin-bottom:6px;">① Berdasarkan data, berapa peluang empirik terjadinya hujan selama bulan Oktober?</p>
+            <input class="input-mini" id="jawab-b1" style="width:100%;max-width:280px" placeholder="P(Hujan) = … / 30 = …">
+          </div>
+
+          <div style="background:#F6F7FA;border-radius:var(--r-md);padding:12px;">
+            <p style="font-size:12.5px;font-weight:600;color:var(--navy);margin-bottom:6px;">② Berapa peluang empirik hari cerah selama bulan Oktober?</p>
+            <input class="input-mini" id="jawab-b2" style="width:100%;max-width:280px" placeholder="P(Cerah) = … / 30 = …">
+          </div>
+
+          <div style="background:#F6F7FA;border-radius:var(--r-md);padding:12px;">
+            <p style="font-size:12.5px;font-weight:600;color:var(--navy);margin-bottom:6px;">③ Jika P(Hujan) + P(Cerah) dijumlahkan, hasilnya berapa? Apa yang dapat kamu simpulkan?</p>
+            <input class="input-mini" id="jawab-b3" style="width:100%;max-width:280px" placeholder="P(Hujan) + P(Cerah) = …">
+          </div>
+
+          <div style="background:#F6F7FA;border-radius:var(--r-md);padding:12px;">
+            <p style="font-size:12.5px;font-weight:600;color:var(--navy);margin-bottom:6px;">④ Apakah peluang cuaca bisa dijadikan kepastian penuh? Jelaskan alasanmu!</p>
+            <textarea id="jawab-b4" style="width:100%;border:1px solid var(--border);border-radius:var(--r-sm);padding:8px;font-family:var(--font-body);font-size:12px;color:var(--text-dark);resize:vertical;min-height:60px;outline:none;" placeholder="Tuliskan pendapatmu di sini…"></textarea>
+          </div>
+        </div>
+      </div>
+
+      <!-- Simulator Visual Cuaca -->
+      <div class="aktivitas-header" style="margin-top:1rem;">
+        <div class="aktivitas-num">C</div>
+        <h3>Simulasi Visual Cuaca Digital</h3>
+      </div>
+      <div class="aktivitas-body">
+        <p style="font-size:12.5px;color:var(--text-mid);margin-bottom:10px;">Klik tombol di bawah untuk mensimulasikan ramalan cuaca secara acak berdasarkan peluang empirik 18/30. Lakukan 10 kali dan catat hasilnya!</p>
+        <div style="display:flex;align-items:center;gap:12px;margin-bottom:12px;flex-wrap:wrap;">
+          <div id="cuacaDisplay" style="width:80px;height:80px;border-radius:var(--r-lg);background:var(--gold-pale);display:flex;align-items:center;justify-content:center;font-size:40px;border:2px solid var(--gold);">☀️</div>
+          <div>
+            <div style="font-size:11px;color:var(--text-muted);margin-bottom:4px;">Hasil Simulasi</div>
+            <div style="font-size:16px;font-weight:700;color:var(--navy);" id="cuacaLabel">Tekan tombol untuk mulai</div>
+            <div style="font-size:11px;color:var(--text-muted);margin-top:4px;">Hujan: <strong id="cuacaCountHujan">0</strong> | Cerah: <strong id="cuacaCountCerah">0</strong> | Total: <strong id="cuacaCountTotal">0</strong></div>
+          </div>
+          <button class="btn-nav gold" onclick="simulasiCuaca()" style="height:fit-content;">🌦️ Simulasi Cuaca</button>
+        </div>
+        <div id="cuacaBar" style="display:flex;gap:3px;flex-wrap:wrap;"></div>
+        <div class="kritis-box" style="margin-top:10px;">
+          <h5>💬 Refleksi Ilmiah</h5>
+          <p>Setelah 10 simulasi, bandingkan hasilmu dengan peluang empirik 18/30 ≈ 0,6. Semakin banyak percobaan, apakah hasil simulasimu mendekati nilai teori? Hubungkan dengan konsep <strong>Hukum Bilangan Besar!</strong></p>
+        </div>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- SLIDE 7B: LKPD PRAKIRAAN CUACA - LANJUTAN -->
+  <div class="slide" id="slide-7">
+    <div class="section-header">
+      <span class="badge navy">🌦️ LKPD Prakiraan Cuaca</span>
+      <div class="slide-title" style="margin-top:8px">Menentukan Peluang Berdasarkan Data Cuaca</div>
+      <p class="slide-subtitle">Sintaks PBL ke-4: Mengembangkan &amp; Menyajikan Hasil Karya</p>
+    </div>
+    <div class="slide-content">
+
+      <!-- Instruksi LKPD -->
+      <div class="orientasi-box" style="margin-bottom:1rem;">
+        <h3>📋 Petunjuk Pengerjaan LKPD</h3>
+        <p>Kerjakan setiap bagian secara berurutan. Gunakan data cuaca dari halaman sebelumnya untuk menjawab soal-soal berikut. Diskusikan bersama kelompokmu dan tuliskan jawaban dengan lengkap!</p>
+      </div>
+
+      <!-- Bagian D: Menentukan Peluang Gabungan -->
+      <div class="aktivitas-header">
+        <div class="aktivitas-num">D</div>
+        <h3>Peluang Gabungan Dua Kejadian</h3>
+      </div>
+      <div class="aktivitas-body">
+        <p style="font-size:12.5px;color:var(--text-mid);margin-bottom:10px;">Berdasarkan data cuaca Surakarta 30 hari (18 hari hujan, 12 hari cerah), jawab pertanyaan berikut:</p>
+        <div style="display:flex;flex-direction:column;gap:12px;">
+          <div style="background:#F6F7FA;border-radius:var(--r-md);padding:12px;">
+            <p style="font-size:12.5px;font-weight:600;color:var(--navy);margin-bottom:6px;">① Jika dipilih 2 hari secara acak berurutan, berapa peluang kedua hari tersebut hujan?</p>
+            <input class="input-mini" id="lkpd2-d1" style="width:100%;max-width:320px" placeholder="P(H∩H) = … × … = …">
+            <div style="font-size:11px;color:var(--text-muted);margin-top:4px;">Petunjuk: P(H) × P(H) = (18/30) × (18/30)</div>
+          </div>
+          <div style="background:#F6F7FA;border-radius:var(--r-md);padding:12px;">
+            <p style="font-size:12.5px;font-weight:600;color:var(--navy);margin-bottom:6px;">② Berapa peluang hari pertama hujan dan hari kedua cerah?</p>
+            <input class="input-mini" id="lkpd2-d2" style="width:100%;max-width:320px" placeholder="P(H∩C) = … × … = …">
+          </div>
+          <div style="background:#F6F7FA;border-radius:var(--r-md);padding:12px;">
+            <p style="font-size:12.5px;font-weight:600;color:var(--navy);margin-bottom:6px;">③ Berapa peluang setidaknya satu hari hujan dalam 2 hari pengambilan?</p>
+            <input class="input-mini" id="lkpd2-d3" style="width:100%;max-width:320px" placeholder="P(min 1 hujan) = 1 - P(tidak hujan) = …">
+          </div>
+        </div>
+        <button class="cek-btn" style="margin-top:10px;" onclick="cekLKPD2D()">✅ Cek Jawaban Bagian D</button>
+        <div id="hasil-lkpd2d" style="display:none;margin-top:10px;padding:10px 14px;background:var(--gold-pale);border-radius:var(--r-md);font-size:13px;color:var(--navy);line-height:1.7;"></div>
+      </div>
+
+      <!-- Bagian E: Membuat Tabel Distribusi Frekuensi -->
+      <div class="aktivitas-header" style="margin-top:1rem;">
+        <div class="aktivitas-num">E</div>
+        <h3>Prediksi Cuaca &amp; Perbandingan Teori vs Empirik</h3>
+      </div>
+      <div class="aktivitas-body">
+        <p style="font-size:12.5px;color:var(--text-mid);margin-bottom:10px;">Lengkapi tabel perbandingan peluang teoretik dan empirik berikut!</p>
+        <div class="tabel-wrap">
+          <table class="tabel-data">
+            <thead>
+              <tr>
+                <th>Kejadian</th>
+                <th>Frekuensi</th>
+                <th>Peluang Empirik</th>
+                <th>Peluang Teori</th>
+                <th>Selisih</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td style="font-weight:600;color:var(--navy)">🌧️ Hujan</td>
+                <td style="text-align:center">18</td>
+                <td style="text-align:center"><input class="input-mini" id="tabel-e1a" style="width:65px" placeholder="…/30"></td>
+                <td style="text-align:center">0,5</td>
+                <td style="text-align:center"><input class="input-mini" id="tabel-e1b" style="width:65px" placeholder="…"></td>
+              </tr>
+              <tr>
+                <td style="font-weight:600;color:var(--navy)">☀️ Cerah</td>
+                <td style="text-align:center">12</td>
+                <td style="text-align:center"><input class="input-mini" id="tabel-e2a" style="width:65px" placeholder="…/30"></td>
+                <td style="text-align:center">0,5</td>
+                <td style="text-align:center"><input class="input-mini" id="tabel-e2b" style="width:65px" placeholder="…"></td>
+              </tr>
+              <tr style="background:var(--gold-pale);">
+                <td style="font-weight:700;color:var(--navy)">Total</td>
+                <td style="text-align:center;font-weight:700">30</td>
+                <td style="text-align:center;font-weight:700">1</td>
+                <td style="text-align:center;font-weight:700">1</td>
+                <td style="text-align:center;font-weight:700">—</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+        <div style="margin-top:12px;">
+          <p style="font-size:12.5px;font-weight:600;color:var(--navy);margin-bottom:6px;">Kesimpulan: Mengapa peluang empirik berbeda dengan peluang teoretik?</p>
+          <textarea id="lkpd2-kesimpulan" style="width:100%;border:1px solid var(--border);border-radius:var(--r-sm);padding:8px;font-family:var(--font-body);font-size:12px;color:var(--text-dark);resize:vertical;min-height:70px;outline:none;" placeholder="Tuliskan kesimpulanmu berdasarkan data yang kamu peroleh…"></textarea>
+        </div>
+      </div>
+
+      <!-- Bagian F: Prediksi Cuaca Minggu Depan -->
+      <div class="aktivitas-header" style="margin-top:1rem;">
+        <div class="aktivitas-num">F</div>
+        <h3>Proyeksi Prakiraan Cuaca 7 Hari ke Depan</h3>
+      </div>
+      <div class="aktivitas-body">
+        <p style="font-size:12.5px;color:var(--text-mid);margin-bottom:10px;">Gunakan peluang empirik yang telah kamu hitung. Prediksi berapa hari yang diperkirakan hujan dan cerah dalam 7 hari ke depan!</p>
+        <div style="display:flex;gap:16px;flex-wrap:wrap;">
+          <div style="background:#EAF3FF;border-radius:var(--r-md);padding:14px;flex:1;min-width:130px;text-align:center;">
+            <div style="font-size:28px;margin-bottom:4px;">🌧️</div>
+            <div style="font-size:11px;color:var(--text-muted);margin-bottom:6px;">Prediksi Hari Hujan</div>
+            <input class="input-mini" id="pred-hujan" style="width:80px;text-align:center;font-size:16px;font-weight:700;" placeholder="…">
+            <div style="font-size:10px;color:var(--text-muted);margin-top:4px;">P(H) × 7 hari</div>
+          </div>
+          <div style="background:#FFF8E6;border-radius:var(--r-md);padding:14px;flex:1;min-width:130px;text-align:center;">
+            <div style="font-size:28px;margin-bottom:4px;">☀️</div>
+            <div style="font-size:11px;color:var(--text-muted);margin-bottom:6px;">Prediksi Hari Cerah</div>
+            <input class="input-mini" id="pred-cerah" style="width:80px;text-align:center;font-size:16px;font-weight:700;" placeholder="…">
+            <div style="font-size:10px;color:var(--text-muted);margin-top:4px;">P(C) × 7 hari</div>
+          </div>
+          <div style="background:#EEEDFE;border-radius:var(--r-md);padding:14px;flex:1;min-width:130px;text-align:center;">
+            <div style="font-size:28px;margin-bottom:4px;">📅</div>
+            <div style="font-size:11px;color:var(--text-muted);margin-bottom:6px;">Total Hari</div>
+            <div style="font-size:22px;font-weight:800;color:var(--navy);">7</div>
+            <div style="font-size:10px;color:var(--text-muted);margin-top:4px;">Harus berjumlah 7</div>
+          </div>
+        </div>
+        <button class="cek-btn" style="margin-top:12px;" onclick="cekPrediksi()">🔮 Cek Prediksi</button>
+        <div id="hasil-prediksi" style="display:none;margin-top:10px;padding:10px 14px;background:var(--gold-pale);border-radius:var(--r-md);font-size:13px;color:var(--navy);line-height:1.7;"></div>
+
+        <div class="kritis-box" style="margin-top:12px;">
+          <h5>💡 Berpikir Kritis</h5>
+          <p>Apakah prediksimu pasti benar? Mengapa dalam ilmu peluang kita tidak bisa memastikan hasil yang akan datang, hanya memperkirakan berdasarkan data masa lalu? Diskusikan dengan kelompokmu!</p>
+        </div>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- SLIDE 8: EVALUASI FORMATIF -->
+  <div class="slide" id="slide-8">
+    <div class="section-header">
+      <span class="badge navy">✅ Evaluasi Formatif</span>
+      <div class="slide-title" style="margin-top:8px">Uji Pemahamanmu!</div>
+      <p class="slide-subtitle">3 soal pilihan ganda interaktif — pilih jawaban terbaikmu</p>
+    </div>
+    <div class="slide-content">
+      <!-- Soal 1 -->
+      <div class="soal-card">
+        <div class="soal-num">Soal 1 dari 3</div>
+        <div class="soal-text">Sebuah dadu dilempar satu kali. Berapa peluang teoritis munculnya angka genap?</div>
+        <div class="pilihan-row" id="soal1-pilihan">
+          <button class="pilihan-btn" onclick="pilih(1,'A','salah')"><span class="pilihan-letter">A</span> 1/6</button>
+          <button class="pilihan-btn" onclick="pilih(1,'B','salah')"><span class="pilihan-letter">B</span> 1/3</button>
+          <button class="pilihan-btn" onclick="pilih(1,'C','benar')"><span class="pilihan-letter">C</span> 1/2</button>
+          <button class="pilihan-btn" onclick="pilih(1,'D','salah')"><span class="pilihan-letter">D</span> 2/3</button>
+        </div>
+        <div style="display:flex;align-items:center;gap:8px;flex-wrap:wrap;">
+          <button class="cek-btn" onclick="cekJawaban(1)">🔍 Cek Jawaban</button>
+          <span id="hasil-soal1"></span>
+        </div>
+        <div class="pembahasan-box" id="pembahasan1">
+          <strong>✅ Pembahasan:</strong> Ruang sampel dadu S = {1,2,3,4,5,6}, n(S)=6. Kejadian angka genap A = {2,4,6}, n(A)=3. Maka P(A) = 3/6 = <strong>1/2</strong>. Jawaban C benar!
+        </div>
+      </div>
+      <!-- Soal 2 -->
+      <div class="soal-card">
+        <div class="soal-num">Soal 2 dari 3</div>
+        <div class="soal-text">Dalam sebuah kotak terdapat 4 bola merah dan 6 bola biru. Jika diambil satu bola secara acak, peluang terambilnya bola merah adalah...</div>
+        <div class="pilihan-row" id="soal2-pilihan">
+          <button class="pilihan-btn" onclick="pilih(2,'A','benar')"><span class="pilihan-letter">A</span> 2/5</button>
+          <button class="pilihan-btn" onclick="pilih(2,'B','salah')"><span class="pilihan-letter">B</span> 1/4</button>
+          <button class="pilihan-btn" onclick="pilih(2,'C','salah')"><span class="pilihan-letter">C</span> 3/5</button>
+          <button class="pilihan-btn" onclick="pilih(2,'D','salah')"><span class="pilihan-letter">D</span> 4/6</button>
+        </div>
+        <div style="display:flex;align-items:center;gap:8px;flex-wrap:wrap;">
+          <button class="cek-btn" onclick="cekJawaban(2)">🔍 Cek Jawaban</button>
+          <span id="hasil-soal2"></span>
+        </div>
+        <div class="pembahasan-box" id="pembahasan2">
+          <strong>✅ Pembahasan:</strong> Total bola n(S) = 4+6 = 10. Bola merah n(A) = 4. Maka P(merah) = 4/10 = <strong>2/5</strong>. Jawaban A benar!
+        </div>
+      </div>
+      <!-- Soal 3 -->
+      <div class="soal-card">
+        <div class="soal-num">Soal 3 dari 3</div>
+        <div class="soal-text">Sebuah koin dilempar sebanyak 50 kali, dan sisi Angka muncul 18 kali. Berapakah peluang empirik munculnya sisi Angka?</div>
+        <div class="pilihan-row" id="soal3-pilihan">
+          <button class="pilihan-btn" onclick="pilih(3,'A','salah')"><span class="pilihan-letter">A</span> 18/100</button>
+          <button class="pilihan-btn" onclick="pilih(3,'B','benar')"><span class="pilihan-letter">B</span> 18/50</button>
+          <button class="pilihan-btn" onclick="pilih(3,'C','salah')"><span class="pilihan-letter">C</span> 1/2</button>
+          <button class="pilihan-btn" onclick="pilih(3,'D','salah')"><span class="pilihan-letter">D</span> 50/18</button>
+        </div>
+        <div style="display:flex;align-items:center;gap:8px;flex-wrap:wrap;">
+          <button class="cek-btn" onclick="cekJawaban(3)">🔍 Cek Jawaban</button>
+          <span id="hasil-soal3"></span>
+        </div>
+        <div class="pembahasan-box" id="pembahasan3">
+          <strong>✅ Pembahasan:</strong> Peluang empirik = frekuensi kejadian / total percobaan = 18/50 = <strong>9/25 = 0,36</strong>. Ini berbeda dari teori (0,5) karena percobaan nyata memiliki variasi alami. Jawaban B benar!
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- SLIDE 10: REFLEKSI & GLOSARIUM & PENUTUP -->
+  <div class="slide" id="slide-9">
+    <div class="section-header">
+      <span class="badge navy">🪞 Refleksi &amp; Penutup</span>
+      <div class="slide-title" style="margin-top:8px">Bagaimana Pemahamanmu Hari Ini?</div>
+      <p class="slide-subtitle">Jujur dengan dirimu sendiri adalah kunci tumbuh!</p>
+    </div>
+    <div class="slide-content">
+      <div class="refleksi-grid">
+        <div class="refleksi-item paham" id="refleksi-paham" onclick="pilihRefleksi('paham')">
+          <span class="refleksi-emoji">😄</span>
+          <div class="refleksi-label">Sangat Paham</div>
+        </div>
+        <div class="refleksi-item cukup" id="refleksi-cukup" onclick="pilihRefleksi('cukup')">
+          <span class="refleksi-emoji">🙂</span>
+          <div class="refleksi-label">Cukup Paham</div>
+        </div>
+        <div class="refleksi-item butuh" id="refleksi-butuh" onclick="pilihRefleksi('butuh')">
+          <span class="refleksi-emoji">😕</span>
+          <div class="refleksi-label">Butuh Belajar Lagi</div>
+        </div>
+      </div>
+      <div class="refleksi-pesan" id="pesanRefleksi"></div>
+
+      <!-- Glosarium -->
+      <div class="card" style="margin-bottom:1rem;">
+        <h4 style="font-size:14px;color:var(--navy);margin-bottom:10px;font-family:var(--font-display);">📚 Glosarium Istilah Penting</h4>
+        <div class="glos-item">
+          <div class="glos-term">Peluang</div>
+          <div class="glos-def">Ukuran matematis tentang seberapa besar kemungkinan suatu kejadian terjadi, nilainya antara 0 (mustahil) sampai 1 (pasti).</div>
+        </div>
+        <div class="glos-item">
+          <div class="glos-term">Ruang Sampel (S)</div>
+          <div class="glos-def">Himpunan semua hasil yang mungkin terjadi dari suatu percobaan acak. Dilambangkan dengan S.</div>
+        </div>
+        <div class="glos-item">
+          <div class="glos-term">Titik Sampel</div>
+          <div class="glos-def">Setiap anggota dari ruang sampel; satu kemungkinan hasil tunggal dari sebuah percobaan.</div>
+        </div>
+        <div class="glos-item">
+          <div class="glos-term">Peluang Teoretik</div>
+          <div class="glos-def">Peluang yang dihitung menggunakan logika matematika: P(A) = n(A)/n(S), tanpa melakukan percobaan fisik.</div>
+        </div>
+        <div class="glos-item">
+          <div class="glos-term">Peluang Empirik</div>
+          <div class="glos-def">Peluang yang ditentukan berdasarkan data hasil percobaan nyata (frekuensi relatif): P(A) = f(A)/n.</div>
+        </div>
+        <div class="glos-item">
+          <div class="glos-term">Frekuensi Relatif</div>
+          <div class="glos-def">Perbandingan antara banyaknya suatu kejadian terjadi dengan total seluruh percobaan yang dilakukan.</div>
+        </div>
+      </div>
+
+      <!-- Penutup -->
+      <div class="penutup-cover">
+        <div class="penutup-icon">🌟</div>
+        <h2>Terima Kasih, Penjelajah Muda!</h2>
+        <p>Kamu telah menyelesaikan Misi Eksplorasi Peluang hari ini.<br>Ilmu yang kamu pelajari adalah bekal untuk memahami dunia yang penuh ketidakpastian.</p>
+      </div>
+      <div class="penutup-religius">
+        <div class="arab">بِسْمِ اللَّهِ الرَّحْمَنِ الرَّحِيمِ</div>
+        <p>"Sesungguhnya Allah tidak mengubah keadaan suatu kaum sebelum mereka mengubah keadaan mereka sendiri." (QS. Ar-Ra'd: 11)</p>
+        <p style="margin-top:8px;font-weight:600;color:var(--navy);">Terus semangat belajar dan berkarya! Semoga ilmu yang diperoleh hari ini menjadi ilmu yang bermanfaat dan berkah. Aamiin. 🤲</p>
+      </div>
+      <div class="credit-row">
+        <span>Media Pembelajaran Matematika | Fase D Kelas VIII</span>
+        <span>Universitas Muhammadiyah Surakarta</span>
+      </div>
+    </div>
+  </div>
+
+  <!-- SLIDE NAVIGATION -->
+  <div class="slide-nav">
+    <button class="btn-nav" id="btnPrev" onclick="prevSlide()" disabled>← Kembali</button>
+    <span style="font-size:12px;color:var(--text-muted);" id="slideLabel">Cover</span>
+    <button class="btn-nav gold" id="btnNext" onclick="nextSlide()">Lanjut →</button>
+  </div>
+</div>
+
+<script>
+const slideLabels = ['Cover','Kata Pengantar','Daftar Isi','Tujuan','Materi','LKPD','LKPD Cuaca','LKPD Prakiraan','Evaluasi','Refleksi'];
+const totalSlides = 10;
+let currentSlide = 0;
+let totalLempar = 0;
+let daduHasil = [0,0,0,0,0,0];
+let pilihanSoal = {};
+
+function goTo(n) {
+  document.getElementById('slide-'+currentSlide).classList.remove('active');
+  currentSlide = n;
+  document.getElementById('slide-'+currentSlide).classList.add('active');
+  updateNav();
+  if(n===5) initDaduGrid();
+}
+
+function nextSlide() { if(currentSlide < totalSlides-1) goTo(currentSlide+1); }
+function prevSlide() { if(currentSlide > 0) goTo(currentSlide-1); }
+
+function updateNav() {
+  const pct = ((currentSlide+1)/totalSlides*100).toFixed(0);
+  document.getElementById('progressFill').style.width = pct+'%';
+  document.getElementById('slideCounter').textContent = (currentSlide+1)+' / '+totalSlides;
+  document.getElementById('slideLabel').textContent = slideLabels[currentSlide];
+  document.getElementById('btnPrev').disabled = currentSlide===0;
+  document.getElementById('btnNext').disabled = currentSlide===totalSlides-1;
+  document.getElementById('btnNext').textContent = currentSlide===totalSlides-1 ? '✓ Selesai' : 'Lanjut →';
+}
+
+// ===== SIMULASI CUACA (SLIDE 7) =====
+let cuacaCountH = 0, cuacaCountC = 0, cuacaCountAll = 0;
+
+function hitungCuaca() {
+  const data = [
+    { id: 'cuaca-m1', hujan: 5, total: 7 },
+    { id: 'cuaca-m2', hujan: 4, total: 7 },
+    { id: 'cuaca-m3', hujan: 5, total: 7 },
+    { id: 'cuaca-m4', hujan: 4, total: 9 },
+  ];
+  data.forEach(d => {
+    const el = document.getElementById(d.id);
+    if (el) el.value = d.hujan + '/' + d.total + ' ≈ ' + (d.hujan/d.total).toFixed(2);
+  });
+  const totalEl = document.getElementById('cuaca-total-p');
+  if (totalEl) totalEl.textContent = '18/30 ≈ 0,60';
+}
+
+function cekCuacaJawaban() {
+  const el = document.getElementById('hasil-cuaca');
+  const b1 = document.getElementById('jawab-b1') ? document.getElementById('jawab-b1').value : '';
+  const b2 = document.getElementById('jawab-b2') ? document.getElementById('jawab-b2').value : '';
+  let msg = '<strong>📝 Kunci Jawaban:</strong><br>';
+  msg += '① P(Hujan) = 18/30 = <strong>3/5 = 0,6</strong><br>';
+  msg += '② P(Cerah) = 12/30 = <strong>2/5 = 0,4</strong><br>';
+  msg += '③ P(Hujan) + P(Cerah) = 0,6 + 0,4 = <strong>1</strong> → Jumlah semua peluang dalam ruang sampel selalu = 1.<br>';
+  msg += '④ Peluang bukan kepastian — hanya perkiraan berdasarkan data historis.<br>';
+  el.innerHTML = msg;
+  el.style.display = 'block';
+}
+
+function simulasiCuaca() {
+  // P(Hujan) = 18/30 = 0.6
+  const isHujan = Math.random() < 0.6;
+  const displayEl = document.getElementById('cuacaDisplay');
+  const labelEl = document.getElementById('cuacaLabel');
+  const countH = document.getElementById('cuacaCountHujan');
+  const countC = document.getElementById('cuacaCountCerah');
+  const countT = document.getElementById('cuacaCountTotal');
+  const barEl = document.getElementById('cuacaBar');
+
+  cuacaCountAll++;
+  if (isHujan) {
+    cuacaCountH++;
+    if (displayEl) {
+      displayEl.style.background = '#DDEEFF';
+      displayEl.style.border = '2px solid #185FA5';
+      displayEl.textContent = '🌧️';
+    }
+    if (labelEl) labelEl.textContent = '🌧️ Hari ini Hujan!';
+  } else {
+    cuacaCountC++;
+    if (displayEl) {
+      displayEl.style.background = 'var(--gold-pale)';
+      displayEl.style.border = '2px solid var(--gold)';
+      displayEl.textContent = '☀️';
+    }
+    if (labelEl) labelEl.textContent = '☀️ Hari ini Cerah!';
+  }
+
+  if (countH) countH.textContent = cuacaCountH;
+  if (countC) countC.textContent = cuacaCountC;
+  if (countT) countT.textContent = cuacaCountAll;
+
+  // Append dot to bar
+  if (barEl) {
+    const dot = document.createElement('div');
+    dot.style.cssText = `
+      width: 28px; height: 28px; border-radius: 50%;
+      display: flex; align-items: center; justify-content: center;
+      font-size: 16px; font-weight: 700;
+      background: ${isHujan ? '#DDEEFF' : '#FFF8CC'};
+      border: 2px solid ${isHujan ? '#185FA5' : '#C9A227'};
+    `;
+    dot.title = isHujan ? 'Hujan' : 'Cerah';
+    dot.textContent = isHujan ? '🌧️' : '☀️';
+    barEl.appendChild(dot);
+  }
+
+  // Auto reset after 10 trials
+  if (cuacaCountAll >= 10) {
+    setTimeout(() => {
+      const pEmpirikal = (cuacaCountH / cuacaCountAll).toFixed(2);
+      if (labelEl) labelEl.textContent = `Selesai! P(H) empirik = ${pEmpirikal}`;
+      cuacaCountH = 0; cuacaCountC = 0; cuacaCountAll = 0;
+      if (barEl) barEl.innerHTML = '';
+    }, 1800);
+  }
+}
+
+// ===== LKPD PRAKIRAAN CUACA (SLIDE BARU) =====
+function cekLKPD2D() {
+  const el = document.getElementById('hasil-lkpd2d');
+  const d1 = document.getElementById('lkpd2-d1').value.trim();
+  const d2 = document.getElementById('lkpd2-d2').value.trim();
+  const d3 = document.getElementById('lkpd2-d3').value.trim();
+  let feedback = '<strong>📝 Kunci Jawaban Bagian D:</strong><br>';
+  feedback += '① P(H∩H) = (18/30) × (18/30) = 0,6 × 0,6 = <strong>0,36</strong> (36%)<br>';
+  feedback += '② P(H∩C) = (18/30) × (12/30) = 0,6 × 0,4 = <strong>0,24</strong> (24%)<br>';
+  feedback += '③ P(min 1 hujan) = 1 − P(C∩C) = 1 − (0,4×0,4) = 1 − 0,16 = <strong>0,84</strong> (84%)<br>';
+  if(!d1 && !d2 && !d3) {
+    feedback += '<br>⚠️ Isi jawaban terlebih dahulu sebelum mengecek!';
+  } else {
+    feedback += '<br>✅ Cocokkan jawabanmu dengan kunci di atas. Apakah sudah sesuai?';
+  }
+  el.innerHTML = feedback;
+  el.style.display = 'block';
+}
+
+function cekPrediksi() {
+  const h = parseFloat(document.getElementById('pred-hujan').value);
+  const c = parseFloat(document.getElementById('pred-cerah').value);
+  const el = document.getElementById('hasil-prediksi');
+  const predH = (18/30)*7;
+  const predC = (12/30)*7;
+  let msg = `<strong>🔮 Evaluasi Prediksimu:</strong><br>`;
+  msg += `Berdasarkan P(Hujan) = 18/30 ≈ 0,6:<br>`;
+  msg += `• Prediksi hari hujan = 0,6 × 7 = <strong>4,2 hari</strong> (dibulatkan 4 hari)<br>`;
+  msg += `• Prediksi hari cerah = 0,4 × 7 = <strong>2,8 hari</strong> (dibulatkan 3 hari)<br>`;
+  if(!isNaN(h) && !isNaN(c)) {
+    const selisihH = Math.abs(h - predH).toFixed(2);
+    const selisihC = Math.abs(c - predC).toFixed(2);
+    msg += `<br>Jawabanmu: Hujan = ${h} hari, Cerah = ${c} hari.<br>`;
+    if(Math.abs(h+c-7) < 0.1) {
+      msg += `✅ Totalnya sudah tepat 7 hari!`;
+    } else {
+      msg += `⚠️ Periksa: Hujan + Cerah harus = 7 hari.`;
+    }
+  } else {
+    msg += `⚠️ Masukkan angka prediksimu terlebih dahulu!`;
+  }
+  el.innerHTML = msg;
+  el.style.display = 'block';
+}
+
+// ===== KOIN TABLE =====
+function initKoinTabel() {
+  const tbody = document.getElementById('koinTabel');
+  if(!tbody || tbody.children.length>0) return;
+  let html = '';
+  for(let i=1;i<=10;i++){
+    html+=`<tr><td style="text-align:center;font-weight:600;color:var(--navy)">${i}</td><td><input class="input-mini" style="width:50px" placeholder="A/G"></td><td style="text-align:center;font-weight:600;color:var(--navy)">${i+10}</td><td><input class="input-mini" style="width:50px" placeholder="A/G"></td></tr>`;
+  }
+  tbody.innerHTML = html;
+}
+initKoinTabel();
+
+function hitungEmpirik(){
+  const a = parseInt(document.getElementById('freqAngka').value)||0;
+  const g = parseInt(document.getElementById('freqGambar').value)||0;
+  const total = a+g;
+  if(total===0){document.getElementById('hasilEmpirik').textContent='Isi frekuensi terlebih dahulu';return;}
+  const p = (a/total).toFixed(3);
+  document.getElementById('hasilEmpirik').textContent = a+' / '+total+' = '+p;
+}
+
+// ===== DADU SIMULATOR =====
+const daduEmoji = ['⚀','⚁','⚂','⚃','⚄','⚅'];
+function initDaduGrid(){
+  const grid = document.getElementById('daduGrid');
+  if(!grid) return;
+  let html='';
+  for(let i=0;i<6;i++){
+    html+=`<div id="dbox-${i}" style="background:var(--white);border:0.5px solid var(--border);border-radius:var(--r-md);padding:8px 4px;text-align:center;">
+      <div style="font-size:18px;">${daduEmoji[i]}</div>
+      <div style="font-size:10px;color:var(--text-muted);margin-top:2px;">n=${daduHasil[i]}</div>
+      <div style="font-size:11px;font-weight:600;color:var(--navy);" id="dfreq-${i}">0.000</div>
+    </div>`;
+  }
+  grid.innerHTML=html;
+}
+function lemparDadu(){
+  const hasil = Math.floor(Math.random()*6);
+  daduHasil[hasil]++;
+  totalLempar++;
+  const emoj = ['1️⃣','2️⃣','3️⃣','4️⃣','5️⃣','6️⃣'];
+  document.getElementById('daduan').textContent = emoj[hasil];
+  document.getElementById('totalLempar').textContent = totalLempar;
+  for(let i=0;i<6;i++){
+    const box = document.getElementById('dbox-'+i);
+    const freq = document.getElementById('dfreq-'+i);
+    if(box) box.querySelector('div:nth-child(2)').textContent='n='+daduHasil[i];
+    if(freq) freq.textContent=(daduHasil[i]/totalLempar).toFixed(3);
+    if(i===hasil && box) { box.style.borderColor='var(--gold)'; box.style.background='var(--gold-pale)'; setTimeout(()=>{ box.style.borderColor=''; box.style.background=''; },600); }
+  }
+}
+
+// ===== EVALUASI =====
+function pilih(soal, huruf, tipe){ pilihanSoal[soal] = {huruf,tipe}; }
+function cekJawaban(soal){
+  if(!pilihanSoal[soal]){alert('Pilih jawaban terlebih dahulu!');return;}
+  const {huruf,tipe} = pilihanSoal[soal];
+  const hasilEl = document.getElementById('hasil-soal'+soal);
+  const pemEl = document.getElementById('pembahasan'+soal);
+  const buttons = document.querySelectorAll(`#soal${soal}-pilihan .pilihan-btn`);
+  buttons.forEach(btn=>{
+    const bHuruf = btn.querySelector('.pilihan-letter').textContent;
+    if(bHuruf===huruf){ btn.classList.add(tipe); }
+  });
+  if(tipe==='benar'){
+    hasilEl.innerHTML='<span class="hasil-badge benar">✓ Benar!</span>';
+  } else {
+    hasilEl.innerHTML='<span class="hasil-badge salah">✗ Kurang tepat</span>';
+  }
+  pemEl.classList.add('show');
+}
+
+// ===== REFLEKSI =====
+const pesanRefleksi = {
+  paham: '🌟 Luar biasa! Kamu sudah memahami konsep ruang sampel, titik sampel, peluang teoretik, dan peluang empirik dengan sangat baik. Tingkatkan terus dengan mencoba soal-soal yang lebih menantang!',
+  cukup: '👍 Bagus! Kamu sudah punya dasar yang kuat. Coba ulangi bagian yang masih terasa bingung, terutama perbedaan antara peluang teoretik dan empirik. Kamu pasti bisa!',
+  butuh: '💪 Jangan menyerah! Peluang adalah topik yang butuh latihan. Coba ulangi bagian Materi Utama dan kerjakan LKPD sekali lagi. Tanya gurumu jika ada yang masih belum jelas, ya!'
+};
+function pilihRefleksi(tipe){
+  ['paham','cukup','butuh'].forEach(t=>{
+    const el = document.getElementById('refleksi-'+t);
+    el.classList.remove('selected','paham','cukup','butuh');
+  });
+  const el = document.getElementById('refleksi-'+tipe);
+  el.classList.add('selected',tipe);
+  const pesanEl = document.getElementById('pesanRefleksi');
+  pesanEl.textContent = pesanRefleksi[tipe];
+  pesanEl.classList.add('show');
+}
+
+updateNav();
+</script>
